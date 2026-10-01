@@ -79,7 +79,7 @@ def cmd_search(args):
 
 def cmd_compare(args):
     sources = load_sources()
-    hits = [row for row in load_excerpts() if matches(row, args.term, args.term)]
+    hits = [row for row in load_excerpts() if matches(row, args.term, None)]
     if not hits:
         print("比較対象の抜粋が見つかりませんでした。")
         return

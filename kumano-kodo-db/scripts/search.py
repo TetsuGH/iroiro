@@ -34,7 +34,8 @@ def matches(row, keyword, tag):
         return False
     if keyword:
         haystack = " ".join(
-            row.get(field, "") for field in ("quote", "tags", "note", "location")
+            row.get(field, "")
+            for field in ("quote", "citation", "summary", "tags", "note", "location")
         )
         if keyword not in haystack:
             return False
@@ -46,7 +47,11 @@ def print_excerpt(row, sources):
     title = src.get("title", row["source_id"])
     author = src.get("author", "")
     print(f"[{row['excerpt_id']}] {title}（{author}） {row['location']}")
-    print(f"  引用: {row['quote']}")
+    print(f"  ハイライト原文: {row['quote']}")
+    if row.get("citation"):
+        print(f"  出典: {row['citation']}")
+    if row.get("summary"):
+        print(f"  要約(再構成・非逐語): {row['summary']}")
     if row.get("tags"):
         print(f"  タグ: {row['tags']}")
     if row.get("note"):
@@ -85,7 +90,8 @@ def cmd_compare(args):
         src = sources.get(source_id, {})
         print(f"=== {src.get('title', source_id)}（{src.get('author', '')}） ===")
         for row in rows:
-            print(f"  ・{row['location']}: {row['quote']}")
+            text = row.get("summary") or row["quote"]
+            print(f"  ・{row['location']}: {text}")
         print()
 
 
